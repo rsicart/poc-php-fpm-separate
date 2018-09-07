@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: index-php-configmap
+data:
+  index.php: |
+      <?php phpinfo();

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: symfony-fpm-deployment
+spec:
+  selector:
+    matchLabels:
+      app: symfony-fpm
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: symfony-fpm
+    spec:
+      containers:
+      - name: php
+        image: php:7.2-fpm-alpine
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+        - name: fpm-pool-volume
+          mountPath: /usr/local/etc/php-fpm.d/
+        - name: index-php-volume
+          mountPath: /srv/app/public/
+      volumes:
+      - name: index-php-volume
+        configMap:
+          # name of the ConfigMap
+          name: index-php-configmap
+      - name: fpm-pool-volume
+        configMap:
+          name: fpm-configmap
